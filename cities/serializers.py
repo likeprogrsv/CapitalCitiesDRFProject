@@ -6,6 +6,8 @@ import io
 
 
 class CitiesSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Cities
         fields = "__all__"

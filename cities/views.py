@@ -4,37 +4,48 @@ from rest_framework import generics, viewsets
 from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import Cities, Continent
 from .serializers import CitiesSerializer
-
-# class CitiesAPIView(generics.ListAPIView):
-#     queryset = Cities.objects.all()
-#     serializer_class = CitiesSerializer
+from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 
 
-class CitiesViewSet(viewsets.ModelViewSet):
+
+class CitiesAPIList(generics.ListCreateAPIView):
     queryset = Cities.objects.all()
     serializer_class = CitiesSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
-    @action(methods=["get"], detail=False)
-    def continents(self, request):
-        continents = Continent.objects.all()
-        return Response({"continents": [x.continent_name for x in continents]})
+class CitiesAPIUpdate(generics.RetrieveUpdateAPIView):
+    queryset = Cities.objects.all()
+    serializer_class = CitiesSerializer
+    permission_classes = (IsOwnerOrReadOnly, )
+
+class CitiesAPIDestroy(generics.RetrieveDestroyAPIView):
+    queryset = Cities.objects.all()
+    serializer_class = CitiesSerializer
+    permission_classes = (IsAdminOrReadOnly, )
+
+
+
+
+# Реализация представления без настройки ограничения прав доступа пользователей
+# class CitiesViewSet(viewsets.ModelViewSet):
+#     queryset = Cities.objects.all()             # Можно закоментировать при переопределении метода get_queryset, но поправить urls
+#     serializer_class = CitiesSerializer
+
+#     @action(methods=["get"], detail=False)
+#     def continents(self, request):
+#         continents = Continent.objects.all()
+#         return Response({"continents": [x.continent_name for x in continents]})
     
+#     def get_queryset(self):
+#         pk = self.kwargs.get("pk")
+        
+#         if not pk:
+#             return Cities.objects.all()[:5]
 
-
-# class CitiesAPIList(generics.ListCreateAPIView):
-#     queryset = Cities.objects.all()
-#     serializer_class = CitiesSerializer
-
-# class CitiesAPIUpdate(generics.UpdateAPIView):
-#     queryset = Cities.objects.all()
-#     serializer_class = CitiesSerializer
-
-# class CitiesAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Cities.objects.all()
-#     serializer_class = CitiesSerializer
-
+#         return Cities.objects.filter(pk=pk)
 
 
 
