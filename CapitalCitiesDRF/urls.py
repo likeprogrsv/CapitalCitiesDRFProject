@@ -14,9 +14,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from cities.views import *
 from rest_framework import routers
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from cities.routes import MyCustomRouter
 
 
@@ -27,6 +28,15 @@ urlpatterns = [
     path('api/v1/cities/', CitiesAPIList.as_view()),
     path('api/v1/cities/<int:pk>/', CitiesAPIUpdate.as_view()),
     path('api/v1/citiesdelete/<int:pk>/', CitiesAPIDestroy.as_view()),
+    
+    # пути в случае реализации с помощью токенов
+    path('api/v1/auth/', include('djoser.urls')),
+    re_path(r'^auth/', include('djoser.urls.authtoken')),
+    
+    # пути в случае реализации с помощью JWT-токенов
+    # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]
 
 

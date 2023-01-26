@@ -4,10 +4,18 @@ from rest_framework import generics, viewsets
 from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.pagination import PageNumberPagination
 from .models import Cities, Continent
 from .serializers import CitiesSerializer
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
+
+
+class CitiesAPIListPagination(PageNumberPagination):
+    page_size = 3
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
 
 
 
@@ -15,11 +23,17 @@ class CitiesAPIList(generics.ListCreateAPIView):
     queryset = Cities.objects.all()
     serializer_class = CitiesSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, )
+    pagination_class = CitiesAPIListPagination
 
 class CitiesAPIUpdate(generics.RetrieveUpdateAPIView):
     queryset = Cities.objects.all()
     serializer_class = CitiesSerializer
-    permission_classes = (IsOwnerOrReadOnly, )
+
+    # Изменение записей только для авторизованных пользователей
+    permission_classes = (IsAuthenticated, )
+
+    # Можно указать, что доступ только для пользователей авторизованных по токену
+    authentication_classes = (TokenAuthentication, )
 
 class CitiesAPIDestroy(generics.RetrieveDestroyAPIView):
     queryset = Cities.objects.all()
