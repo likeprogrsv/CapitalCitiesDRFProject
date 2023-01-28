@@ -1,9 +1,10 @@
 from rest_framework import routers
 
 
-
 class MyCustomRouter(routers.SimpleRouter):
-    '''Пример кастомного роута для обработки маршрутов представлений (views.py)'''
+    '''
+    Пример кастомного роута для обработки маршрутов представлений (views.py)
+    '''
     routes = [
         routers.Route(url=r'^{prefix}$',
                       mapping={'get': 'list'},

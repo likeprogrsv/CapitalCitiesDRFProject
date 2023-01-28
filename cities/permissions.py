@@ -1,5 +1,6 @@
 from rest_framework import permissions
 
+
 class IsAdminOrReadOnly(permissions.BasePermission):
     """
     Свой класс для предоставления доступа админу удалять записи.

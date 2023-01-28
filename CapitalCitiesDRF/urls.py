@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
-from cities.views import *
-from rest_framework import routers
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
-from cities.routes import MyCustomRouter
-
+from cities.views import (
+    CitiesAPIList, CitiesAPIUpdate, CitiesAPIDestroy
+)
+# from rest_framework import routers
+# from rest_framework_simplejwt.views import (
+# TokenObtainPairView, TokenRefreshView, TokenVerifyView)
+# from cities.routes import MyCustomRouter
 
 
 urlpatterns = [
@@ -28,22 +30,27 @@ urlpatterns = [
     path('api/v1/cities/', CitiesAPIList.as_view()),
     path('api/v1/cities/<int:pk>/', CitiesAPIUpdate.as_view()),
     path('api/v1/citiesdelete/<int:pk>/', CitiesAPIDestroy.as_view()),
-    
+
     # пути в случае реализации с помощью токенов
     path('api/v1/auth/', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.authtoken')),
-    
+
     # пути в случае реализации с помощью JWT-токенов
-    # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    # path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    # path('api/token/', TokenObtainPairView.as_view(),
+    #       name='token_obtain_pair'),
+    # path('api/token/refresh/', TokenRefreshView.as_view(),
+    #       name='token_refresh'),
+    # path('api/token/verify/', TokenVerifyView.as_view(),
+    #       name='token_verify'),
 ]
 
 
-# Настройка маршрутов при определении одного представления на все основные методы запросов
+# Настройка маршрутов при определении одного представления на
+# все основные методы запросов
 # router = routers.DefaultRouter()
-# router.register(r'cities', CitiesViewSet)       # Добавить атрибут basename="cities" при переопределении get_queryset
-                                                  # во views если не будет строки queryset = Cities.objects.all()
+# # Добавить атрибут basename="cities" при переопределении get_queryset
+# # во views если не будет строки queryset = Cities.objects.all()
+# router.register(r'cities', CitiesViewSet)
 
 # Можно использовать кастомные классы роутов
 # router = MyCustomRouter()
@@ -52,12 +59,13 @@ urlpatterns = [
 # Пути url в случае использования маршрутов route
 # urlpatterns = [
 #     path('admin/', admin.site.urls),
-#     path('api/v1/', include(router.urls))           # http://127.0.0.1:8000/api/v1/cities/
-# ]
+
+#     # http://127.0.0.1:8000/api/v1/cities/
+#     path('api/v1/', include(router.urls))
 
 
-
-# Старый вариант без использования роута 
+# Старый вариант без использования роута
 
 # path('api/v1/citieslist/', CitiesViewSet.as_view({"get": "list"})),
-# path('api/v1/citieslist/<int:pk>/', CitiesViewSet.as_view({"put": "update"})),
+# path('api/v1/citieslist/<int:pk>/',
+#       CitiesViewSet.as_view({"put": "update"})),

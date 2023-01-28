@@ -1,8 +1,7 @@
 from rest_framework import serializers
-from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
+# from rest_framework.renderers import JSONRenderer
+# from rest_framework.parsers import JSONParser
 from .models import Cities
-import io
 
 
 class CitiesSerializer(serializers.ModelSerializer):
@@ -13,12 +12,8 @@ class CitiesSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-
-
-
-
-
-# Кастомный пример сериализатора для понимания того как они работают, если придется писать свой собственный
+# Кастомный пример сериализатора для понимания того как они работают,
+# если придется писать свой собственный
 
 # class CitiesSerializer(serializers.Serializer):
 #     title = serializers.CharField(max_length=255)
@@ -34,12 +29,15 @@ class CitiesSerializer(serializers.ModelSerializer):
 #     def update(self, instance, validated_data):
 #         instance.title = validated_data.get("title", instance.title)
 #         instance.content = validated_data.get("content", instance.content)
-#         instance.time_update = validated_data.get("time_update", instance.time_update)
-#         instance.is_published = validated_data.get("is_published", instance.is_published)
-#         instance.continent_id = validated_data.get("continent_id", instance.continent_id)
+#         instance.time_update = validated_data.get("time_update",
+#                                                   instance.time_update)
+#         instance.is_published = validated_data.get("is_published",
+#                                   instance.is_published)
+#         instance.continent_id = validated_data.get("continent_id",
+#                                   instance.continent_id)
 #         instance.save()
 #         return instance
-    
+
 # def encode():
 #     model = CitiesModel("Oslo", "Oslo city")
 #     model_sr = CitiesSerializer(model)
@@ -48,7 +46,8 @@ class CitiesSerializer(serializers.ModelSerializer):
 #     print(json)
 
 # def decode():
-#     stream = io.BytesIO(b'{"title": "Oslo", "content": "recive Oslo city info"}')
+#     stream = io.BytesIO(b'{"title": "Oslo",
+#           "content": "recive Oslo city info"}')
 #     data = JSONParser().parse(stream)
 #     serializer = CitiesSerializer(data=data)
 #     serializer.is_valid()
